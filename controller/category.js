@@ -13,11 +13,12 @@ exports.getCategories = asyncHandler(async(req, res, next) => {
     res.status(200).json(res.advancedResults);
 });
 
+
 //@desc Get categories
 //@route GET /api/v1/categories/:id
 //@accss Public
 exports.getCategory = asyncHandler(async(req, res, next) => {
-    const category = await Category.findById(req.params.id);
+    const category = await Category.findById(req.params.id).populate('houses');
     if (!category) {
         // res.status(404).json({success:false,data:error.message})
         return next(

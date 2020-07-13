@@ -1,9 +1,14 @@
 const upload = require("../utils/multer");
-const { createHouse } = require("../controller/house");
 const express = require("express");
+const url = require('url');
+const querystring = require('querystring');
+const { createHouse, getHouses, getHouse, getHouseBySlug, getHousesBySearch, getHouseByAgent, testAddress, deleteHouse } = require("../controller/house");
 
+const House = require("../model/House");
 const router = express.Router();
 const { protect, authorize } = require('../middleware/auth');
+const { route } = require("./category");
+const advancedResults = require("../middleware/advancedResults");
 
 
 
@@ -21,7 +26,17 @@ const { protect, authorize } = require('../middleware/auth');
 // let upload = multer({
 //     storage: storage
 // });
-router.post('/', protect, upload.array("image"), createHouse);
 
+//Route links
+router.post('/', protect, upload.array("image"), authorize('admin', 'agent'), createHouse);
+router.route('/').get(advancedResults(House, {
+    path: "user",
+    select: "firstname lastname email",
+}), getHouses).put(testAddress);
+router.route('/:id').get(getHouse).delete(deleteHouse);
+router.get('/area/search', getHousesBySearch);
+router.get('/_/user', protect, authorize('admin', 'agent'), getHouseByAgent);
+router.route('/_/:slug').get(getHouseBySlug);
+// router.get('/radius/:zipcode/:distance', getHouseByRadius)
 
 module.exports = router;

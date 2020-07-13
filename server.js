@@ -22,6 +22,7 @@ if (process.env.NODE_ENV === 'development') {
 const category = require("./routes/category");
 const house = require("./routes/house");
 const auth = require("./routes/auth");
+const userhouse = require("./routes/userhouse");
 
 
 
@@ -36,6 +37,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/api/v1/categories", category);
 app.use("/api/v1/houses", house);
 app.use("/api/v1/auth", auth);
+app.use("/api/v1/user_house", userhouse);
 // app.use(house);
 //Port definition
 

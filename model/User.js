@@ -67,6 +67,9 @@ const UserSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     }
+}, {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 });
 //Encrypt password using bcrypt
 UserSchema.pre('save', async function(next) {
@@ -118,6 +121,13 @@ UserSchema.pre("save", async function(next) {
     // Do not save address in DB
     // this.address = undefined;
     next();
+});
+
+UserSchema.virtual('user', {
+    ref: 'House',
+    localField: '_id',
+    foreignField: 'user',
+    justOne: false
 });
 
 module.exports = mongoose.model('User', UserSchema);
