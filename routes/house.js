@@ -33,7 +33,7 @@ router.route('/').get(advancedResults(House, {
     path: "user",
     select: "firstname lastname email",
 }), getHouses).put(testAddress);
-router.route('/:id').get(getHouse).delete(deleteHouse);
+router.route('/:id').get(getHouse).delete(protect, authorize('admin', 'agent'), deleteHouse);
 router.get('/area/search', getHousesBySearch);
 router.get('/_/user', protect, authorize('admin', 'agent'), getHouseByAgent);
 router.route('/_/:slug').get(getHouseBySlug);
