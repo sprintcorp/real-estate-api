@@ -15,6 +15,17 @@ exports.getAgents = asyncHandler(async(req, res, next) => {
     });
 })
 
+exports.getAgent = asyncHandler(async(req, res, next) => {
+    const agent = await User.find({ _id: req.params.id })
+    if (!agent) {
+        return next(new ErrorResponse('No Agent Available with this id', 404))
+    }
+    res.status(200).json({
+        success: true,
+        data: agent
+    });
+})
+
 exports.getAgentHouse = asyncHandler(async(req, res, next) => {
     const agent = await House.find({ user: req.params.user })
     if (!agent) {
