@@ -2,7 +2,11 @@ const User = require("../model/User");
 const ErrorResponse = require("../utils/errorResponse");
 const asyncHandler = require("../middleware/async");
 const sendEmail = require("../utils/mail");
+const _ = require("underscore");
+const fs = require("fs");
+const cloudinary = require('../utils/upload')
 const crypto = require('crypto');
+const { random } = require("underscore");
 
 //@desc Register user
 //@route POST /api/v1/auth/register
@@ -43,6 +47,7 @@ exports.login = asyncHandler(async(req, res, next) => {
 
 });
 
+
 // @desc      Log user out / clear cookie
 // @route     GET /api/v1/auth/logout
 // @access    Public
@@ -71,16 +76,35 @@ exports.getMe = asyncHandler(async(req, res, next) => {
     })
 });
 
+
 //@desc  Update user details
 //@route PUT /api/v1/auth/updatedetails
 //@accss private
 exports.updateDetails = asyncHandler(async(req, res, next) => {
+    // const upload = new cloudinary(req.file);
+    const profile = new cloudinary(req.user.image).delete();
+    if (req.file) {
+        const files = req.file;
+        try {
+            let multiple = async(path) => await new cloudinary(path).upload();
+            const { path } = files;
+            console.log("path", files);
+            const newPath = await multiple(path);
+            fs.unlinkSync(path);
+            req.body.image = newPath;
+        } catch (e) {
+            console.log("err :", e);
+            return next(new ErrorResonse(e, 400));
+        }
+    }
+    // console.log("true")
     const fieldsToUpdate = {
         firstname: req.body.firstname,
         lastname: req.body.lastname,
         phone: req.body.phone,
         address: req.body.address,
-        email: req.body.email
+        email: req.body.email,
+        image: req.body.image
     };
 
     const user = await User.findByIdAndUpdate(req.user.id, fieldsToUpdate, {
@@ -98,6 +122,7 @@ exports.updateDetails = asyncHandler(async(req, res, next) => {
 // @route     PUT /api/v1/auth/updatepassword
 // @access    Private
 exports.updatePassword = asyncHandler(async(req, res, next) => {
+
     const user = await User.findById(req.user.id).select('+password');
 
     // Check current password

@@ -26,24 +26,40 @@ exports.getHouse = asyncHandler(async(req, res, next) => {
 });
 
 //@desc Get Houses by slug
-//@route GET /api/v1/houses/:slug
+//@route GET /api/v1/houses/_/:slug
 //@accss Public
 exports.getHouseBySlug = asyncHandler(async(req, res, next) => {
     const house = await House.find({
         slug: req.params.slug
-    });
+    }).populate('user');
     res.status(200).json({ success: true, data: house });
 });
 
-//@desc Get Houses by users('agent','admin')
-//@route GET /api/v1/houses/user
-//@accss Public
+//@desc Get Houses by users('agent')
+//@route GET /api/v1/houses/_/user
+//@accss Private
 exports.getHouseByAgent = asyncHandler(async(req, res, next) => {
     const house = await House.find({
         user: req.user.id
     });
     res.status(200).json({ success: true, data: house });
 });
+
+//@desc Get Houses by value
+//@route GET /api/v1/houses/_/requirement
+//@accss Private
+exports.getHouseByRequirement = asyncHandler(async(req, res, next) => {
+    console.log(req.query)
+    const house = await House.find({
+        $and: [{
+            "price": { "$gte": req.query.min, "$lte": req.query.max },
+            "city": { "$in": req.query.city }
+        }]
+
+    });
+    res.status(200).json({ success: true, length: house.length, data: house });
+});
+
 
 //@desc Get Houses by search
 //@route GET /api/v1/houses/area/search
@@ -76,10 +92,6 @@ exports.testAddress = asyncHandler(async(req, res, next) => {
 exports.createHouse = asyncHandler(async(req, res, next) => {
     // console.log(req.files);
     req.body.user = req.user.id;
-    req.body.phone = req.user.phone;
-    req.body.email = req.user.email;
-    req.body.firstname = req.user.firstname;
-    req.body.lastname = req.user.lastname;
 
     // req.body.features = req.body.features.split(',');
     if (!req.files || _.isEmpty(req.files)) {
@@ -88,7 +100,7 @@ exports.createHouse = asyncHandler(async(req, res, next) => {
     const files = req.files
     try {
         let urls = [];
-        let multiple = async(path) => await cloudinary.upload(path);
+        let multiple = async(path) => await new cloudinary(path).upload();
         console.log(files);
         for (const file of files) {
             const { path } = file;

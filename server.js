@@ -2,7 +2,12 @@ const express = require("express");
 const dotenv = require("dotenv");
 const morgan = require('morgan');
 // const fileUpload = require('express-fileupload');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
 const bodyParser = require('body-parser');
+const hpp = require('hpp');
+const helmet = require("helmet");
+const cors = require('cors');
 const connectDB = require('./config/db');
 const errorHandler = require('./middleware/error');
 // const fs = require('fs')
@@ -14,6 +19,18 @@ dotenv.config({ path: "./config/config.env" });
 const app = express();
 // Connect to database
 connectDB();
+
+// Sanitize data
+app.use(mongoSanitize());
+
+//Set security header
+app.use(helmet());
+//Prevents XSS Attack
+app.use(xss());
+//Enable CORS
+app.use(cors());
+//Prevent http param pollution
+app.use(hpp());
 //Dev logging middleware
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
@@ -22,6 +39,7 @@ if (process.env.NODE_ENV === 'development') {
 const category = require("./routes/category");
 const house = require("./routes/house");
 const auth = require("./routes/auth");
+const user = require("./routes/user");
 const userhouse = require("./routes/userhouse");
 
 
@@ -37,6 +55,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/api/v1/categories", category);
 app.use("/api/v1/houses", house);
 app.use("/api/v1/auth", auth);
+app.use("/api/v1/user", user);
 app.use("/api/v1/user_house", userhouse);
 // app.use(house);
 //Port definition

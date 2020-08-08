@@ -27,7 +27,14 @@ const HouseSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please add description']
     },
+
+    price: {
+        type: Number,
+    },
     features: {
+        type: []
+    },
+    network: {
         type: []
     },
     address: {

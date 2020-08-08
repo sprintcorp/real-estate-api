@@ -26,10 +26,20 @@ const UserSchema = new mongoose.Schema({
         type: String,
         maxlength: [20, "Phone number can not be more than 20 characters"],
     },
+    image: {
+        type: String
+    },
     address: {
         type: String,
         default: "Nigeria"
     },
+    city: String,
+    state: String,
+    neighborhood: String,
+    administrativeLevels: String,
+    country: String,
+    countryCode: String,
+    street: String,
     location: {
         //Geocode address
         type: {
@@ -42,12 +52,6 @@ const UserSchema = new mongoose.Schema({
             required: false,
             index: "2dsphere",
         },
-        formattedAddress: String,
-        street: String,
-        city: String,
-        state: String,
-        zipcode: String,
-        country: String,
     },
 
     role: {
@@ -108,18 +112,21 @@ UserSchema.methods.getResetPasswordToken = function() {
 
 UserSchema.pre("save", async function(next) {
     const loc = await geocoder.geocode(this.address);
+    console.log(loc);
     this.location = {
         type: "Point",
         coordinates: [loc[0].longitude, loc[0].latitude],
         formattedAddress: loc[0].formattedAddress,
-        city: loc[0].city,
-        street: loc[0].streetName,
-        state: loc[0].state,
-        zipcode: loc[0].zipcode,
-        countryCode: loc[0].countryCode,
+
     };
-    // Do not save address in DB
-    // this.address = undefined;
+    this.city = loc[0].city,
+        this.street = loc[0].streetName,
+        this.state = loc[0].state,
+        this.administrativeLevels = loc[0].administrativeLevels.level2long,
+        this.neighborhood = loc[0].extra.neighborhood,
+        this.countryCode = loc[0].countryCode,
+        this.country = loc[0].country,
+        this.address = loc[0].formattedAddress;
     next();
 });
 
