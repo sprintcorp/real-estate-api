@@ -60,6 +60,16 @@ exports.getHouseByRequirement = asyncHandler(async(req, res, next) => {
     res.status(200).json({ success: true, length: house.length, data: house });
 });
 
+//@desc Get Random Houses
+//@route GET /api/v1/houses/_/random
+//@accss Private
+exports.getHouseByRandom = asyncHandler(async(req, res, next) => {
+    // console.log(req.query.rand)
+    // const no = typeof parseInt(req.query.rand);
+    const house = await House.aggregate([{ $sample: { size: 2 } }]);
+    res.status(200).json({ success: true, length: house.length, data: house });
+});
+
 
 //@desc Get Houses by search
 //@route GET /api/v1/houses/area/search
@@ -138,4 +148,4 @@ exports.deleteHouse = asyncHandler(async(req, res, next) => {
     if (house) {
         res.status(200).json({ success: true, data: "house Successfully deleted" });
     }
-})
+});

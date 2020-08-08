@@ -2,7 +2,7 @@ const upload = require("../utils/multer");
 const express = require("express");
 const url = require('url');
 const querystring = require('querystring');
-const { createHouse, getHouses, getHouse, getHouseBySlug, getHousesBySearch, getHouseByAgent, getHouseByRequirement, testAddress, deleteHouse } = require("../controller/house");
+const { createHouse, getHouses, getHouse, getHouseBySlug, getHousesBySearch, getHouseByAgent, getHouseByRandom, getHouseByRequirement, testAddress, deleteHouse } = require("../controller/house");
 
 const House = require("../model/House");
 const router = express.Router();
@@ -36,7 +36,8 @@ router.route('/').get(advancedResults(House, {
 router.route('/:id').get(getHouse).delete(protect, authorize('admin', 'agent'), deleteHouse);
 router.get('/area/search', getHousesBySearch);
 router.get('/_/user', protect, authorize('agent'), getHouseByAgent);
-router.get('/_/requirement', getHouseByRequirement)
+router.get('/_/requirement', getHouseByRequirement);
+router.get('/_/random', getHouseByRandom);
 router.route('/_/:slug').get(getHouseBySlug);
 // router.get('/radius/:zipcode/:distance', getHouseByRadius)
 
