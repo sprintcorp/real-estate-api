@@ -7,7 +7,7 @@ const HouseSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please add a name'],
         trim: true,
-        maxlength: [20, "Name can not be more than 20 characters"],
+        maxlength: [100, "Name can not be more than 100 characters"],
     },
     image: {
         type: []
