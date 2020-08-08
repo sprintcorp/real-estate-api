@@ -64,9 +64,13 @@ exports.getHouseByRequirement = asyncHandler(async(req, res, next) => {
 //@route GET /api/v1/houses/_/random
 //@accss Private
 exports.getHouseByRandom = asyncHandler(async(req, res, next) => {
-    // console.log(req.query.rand)
-    // const no = typeof parseInt(req.query.rand);
-    const house = await House.aggregate([{ $sample: { size: 2 } }]);
+    console.log(req.query.rand)
+    let no = 2;
+    if (req.query.rand == 3) {
+        no = 3;
+    }
+
+    const house = await House.aggregate([{ $sample: { size: no } }]);
     res.status(200).json({ success: true, length: house.length, data: house });
 });
 
