@@ -41,6 +41,11 @@ const HouseSchema = new mongoose.Schema({
         type: String,
         default: "Nigeria"
     },
+    type: {
+        type: String,
+        enum: ['rent', 'sale'],
+        default: 'sale'
+    },
     city: String,
     state: String,
     neighborhood: String,
