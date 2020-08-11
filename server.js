@@ -17,6 +17,8 @@ const errorHandler = require('./middleware/error');
 dotenv.config({ path: "./config/config.env" });
 
 const app = express();
+//Enable CORS
+app.use(cors());
 // Connect to database
 connectDB();
 
@@ -27,10 +29,15 @@ app.use(mongoSanitize());
 app.use(helmet());
 //Prevents XSS Attack
 app.use(xss());
-//Enable CORS
-app.use(cors());
+
 //Prevent http param pollution
 app.use(hpp());
+
+//Body parser
+// app.use(express.json());
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }));
+
 //Dev logging middleware
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
@@ -44,10 +51,7 @@ const userhouse = require("./routes/userhouse");
 
 
 
-//Body parser
-// app.use(express.json());
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: false }));
+
 
 // app.use(fileUpload());
 
