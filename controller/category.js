@@ -106,7 +106,7 @@ exports.deleteCategory = asyncHandler(async(req, res, next) => {
             new ErrorResponse(`User is not authoried to update category`, 403)
         );
     }
-    Category.remove();
+    category.remove();
     res
         .status(200)
         .json({ success: true, data: "category Successfully deleted" });
