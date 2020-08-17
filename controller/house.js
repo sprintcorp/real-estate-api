@@ -81,12 +81,15 @@ exports.getHouseByRandom = asyncHandler(async(req, res, next) => {
 exports.getHousesBySearch = asyncHandler(async(req, res, next) => {
     const def = new utils(req.query.name)
     const houses = await House.find({
-        $or: [{
-                administrativeLevels: def.Case
-            }, { neighborhood: def.Case },
-            { city: def.Case },
-            { street: def.Case }
-        ]
+        $and: [{
+            $or: [{
+                    administrativeLevels: def.Case
+                }, { neighborhood: def.Case },
+                { city: def.Case },
+                { street: def.Case }
+            ],
+            "type": req.query.type
+        }]
     });
 
     res.status(200).json({ success: true, length: houses.length, data: houses });

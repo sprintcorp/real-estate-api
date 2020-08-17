@@ -12,7 +12,11 @@ const { random } = require("underscore");
 //@route POST /api/v1/auth/register
 //@accss Public
 exports.register = asyncHandler(async(req, res, next) => {
+    if (req.body.role === "admin") {
+        req.body.role = "user"
+    }
     const { firstname, lastname, email, password, role, address } = req.body;
+
     console.log(req.body);
     //Create user
     const user = await User.create({ firstname, lastname, email, password, role, address });
@@ -98,6 +102,9 @@ exports.updateDetails = asyncHandler(async(req, res, next) => {
         }
     }
     // console.log("true")
+    if (req.body.role === "admin") {
+        req.body.role = "user"
+    }
     const fieldsToUpdate = {
         firstname: req.body.firstname,
         lastname: req.body.lastname,
