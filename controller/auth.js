@@ -156,8 +156,8 @@ exports.forgotPassword = asyncHandler(async(req, res, next) => {
     const resetToken = user.getResetPasswordToken();
     await user.save({ validateBeforeSave: false })
 
-    //CReate reset url
-    const resetUrl = `${req.protocol}://127.0.0.1:8080/password-reset/${resetToken}`;
+    //CReate reset url http://zattis-frontend.herokuapp.com/recover-password
+    const resetUrl = `${req.protocol}://zattis-frontend.herokuapp.com/${resetToken}`;
 
     const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a PUT request to:\n\n ${resetUrl}`;
 
