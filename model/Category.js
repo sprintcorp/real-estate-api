@@ -30,6 +30,13 @@ CategorySchema.pre("save", function(next) {
     next();
 });
 
+//Cascade delete houses when a category is deleted
+CategorySchema.pre('remove', async function(next) {
+    console.log(`Houses being removed from category ${this._id}`);
+    await this.model('Houses').deleteMany({ category: this._id });
+    next();
+});
+
 CategorySchema.virtual('houses', {
     ref: 'House',
     localField: '_id',

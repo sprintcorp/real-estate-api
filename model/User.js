@@ -53,7 +53,11 @@ const UserSchema = new mongoose.Schema({
             index: "2dsphere",
         },
     },
-
+    averageRating: {
+        type: Number,
+        min: [1, "Rating must be at least 1"],
+        min: [5, "Rating must not be more than 5"],
+    },
     role: {
         type: String,
         enum: ['user', 'agent', 'admin'],

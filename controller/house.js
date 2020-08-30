@@ -6,7 +6,7 @@ const _ = require("underscore");
 const fs = require("fs");
 const cloudinary = require('../utils/upload')
 const geocoder = require('../utils/geocoder');
-const { findByIdAndDelete } = require("../model/House");
+// const { findByIdAndDelete } = require("../model/House");
 // const url = require('url');
 
 

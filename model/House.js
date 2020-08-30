@@ -18,6 +18,10 @@ const HouseSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
+    availability: {
+        default: "true",
+        type: String
+    },
     category: {
         type: mongoose.Schema.ObjectId,
         ref: 'Category',

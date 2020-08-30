@@ -48,6 +48,7 @@ const house = require("./routes/house");
 const auth = require("./routes/auth");
 const user = require("./routes/user");
 const userhouse = require("./routes/userhouse");
+const rating = require("./routes/rating");
 
 
 
@@ -61,6 +62,7 @@ app.use("/api/v1/houses", house);
 app.use("/api/v1/auth", auth);
 app.use("/api/v1/user", user);
 app.use("/api/v1/user_house", userhouse);
+app.use("/api/v1/rating", rating);
 // app.use(house);
 //Port definition
 
