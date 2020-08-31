@@ -8,7 +8,7 @@ const User = require('../model/User');
 // @access    Public
 exports.getRatings = asyncHandler(async(req, res, next) => {
     // if (req.params.bootcampId) {
-    const rating = await Rating.find({ agent: req.params.id });
+    const rating = await Rating.find({ agent: req.params.id }).select('rating');
 
     return res.status(200).json({
         success: true,
