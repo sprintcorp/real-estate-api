@@ -29,11 +29,11 @@ exports.getCategory = asyncHandler(async(req, res, next) => {
 });
 
 //@desc Get categories by slug
-//@route GET /api/v1/categories/info/:slug
+//@route GET /api/v1/categories/cat/:slug
 //@accss Public
 exports.getCategoryBySlug = asyncHandler(async(req, res, next) => {
     const { slug } = req.params;
-    const category = await Category.find({ slug: slug });
+    const category = await Category.find({ slug: slug }).populate('houses');
     if (!category) {
         // res.status(404).json({success:false,data:error.message})
         return next(

@@ -14,6 +14,10 @@ const errorHandler = (err, req, res, next) => {
         const message = `Resource not found with id of ${err.value}`;
         error = new ErrorResponse(message, 404);
     }
+    if (err.name === 'MongooseServerSelectionError') {
+        const message = `connection timed out`;
+        error = new ErrorResponse(message, 404);
+    }
 
     //Mongoose duplicate key
     if (err.code === 11000) {
