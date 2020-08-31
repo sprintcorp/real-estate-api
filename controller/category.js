@@ -18,7 +18,7 @@ exports.getCategories = asyncHandler(async(req, res, next) => {
 //@route GET /api/v1/categories/:id
 //@accss Public
 exports.getCategory = asyncHandler(async(req, res, next) => {
-    const category = await Category.findById(req.params.id).populate('houses');
+    const category = await Category.findById(req.params.id).select('houses').populate('houses');
     if (!category) {
         // res.status(404).json({success:false,data:error.message})
         return next(
