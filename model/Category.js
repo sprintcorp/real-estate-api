@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require("slugify");
+const House = require("./House");
 
 const CategorySchema = new mongoose.Schema({
     name: {
@@ -33,7 +34,7 @@ CategorySchema.pre("save", function(next) {
 //Cascade delete houses when a category is deleted
 CategorySchema.pre('remove', async function(next) {
     console.log(`Houses being removed from category ${this._id}`);
-    await this.model('Houses').deleteMany({ category: this._id });
+    await House.deleteMany({ category: this._id });
     next();
 });
 
