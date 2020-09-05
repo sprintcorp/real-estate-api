@@ -21,7 +21,7 @@ exports.getHouses = asyncHandler(async(req, res, next) => {
 //@route GET /api/v1/houses/:id
 //@accss Public
 exports.getHouse = asyncHandler(async(req, res, next) => {
-    const house = await House.findById(req.params.id).populate('user');
+    const house = await House.findById(req.params.id).populate('user', 'category');
     res.status(200).json({ success: true, data: house });
 });
 
